@@ -1,11 +1,11 @@
-user_choice = 1
-
 def main_menu():
 
-    global user_choice
+    # this is the entry point of program through the main function
+    # function that naviagate through the whole program
 
     user_choice = ""
-    
+
+    # dictionary acting as a switch case as to reduce numbers of if else statements
     menu_options = {0 : "exit()",
                     1 : "matrices_addition()",
                     2 : "matrix_multiplication()",
@@ -14,6 +14,7 @@ def main_menu():
                     5 : "print(matrix_determinant(matrix, matrix_rows, matrix_columns))",
                     6 : "print(matrix_inverse(matrix, matrix_rows, matrix_columns))"}
 
+    # while loop to keep running program until user exits
     while user_choice != 0:
 
         print("1. Add matrices")
@@ -27,7 +28,7 @@ def main_menu():
         user_choice = int(input("Your choice:"))
         
         if user_choice in (5, 6):
-            matrix_info = second_matrix_init()
+            matrix_info = second_matrix_init(True)
             matrix, matrix_rows, matrix_columns = matrix_info
             
         eval(menu_options[user_choice])
@@ -36,6 +37,8 @@ def main_menu():
 
 
 def first_matrix_init():
+
+    # function to initialize the first matrix
 
     first_matrix = []
     first_matrix_rows = 0
@@ -58,15 +61,17 @@ def first_matrix_init():
     return (first_matrix, first_matrix_rows, first_matrix_columns)
 
 
-def second_matrix_init():
+def second_matrix_init(is_single_matrix):
 
-    global user_choice
+    # function to initialize the first matrix
+    # second matrix is used when operations are performed on single matrix only
 
     second_matrix = []
     second_matrix_rows = 0
     second_matrix_columns = 0
 
-    if user_choice in (2, 4, 5, 6):
+    # checks whether single matrix operation is being performed
+    if is_single_matrix:
         second_matrix_rows , second_matrix_columns = input("Enter size of matrix:").split()
     else:
         second_matrix_rows , second_matrix_columns = input("Enter size of second matrix:").split()
@@ -93,11 +98,12 @@ def second_matrix_init():
 def matrices_addition():
 
     first_matrix_info = first_matrix_init()
-    second_matrix_info = second_matrix_init()
+    second_matrix_info = second_matrix_init(False)
 
     first_matrix, first_matrix_rows, first_matrix_columns = first_matrix_info
     second_matrix, second_matrix_rows, second_matrix_columns = second_matrix_info
 
+    # checks if matrices addition possible
     if first_matrix_rows == second_matrix_rows and first_matrix_columns == second_matrix_columns:
 
         sum_matrix = []
@@ -120,7 +126,7 @@ def matrices_addition():
 
 def matrix_multiplication():
 
-    matrix_info = second_matrix_init()
+    matrix_info = second_matrix_init(True)
 
     matrix, matrix_rows, matrix_columns = matrix_info
 
@@ -151,11 +157,12 @@ def matrix_multiplication():
 def matrices_multiplication():
 
     first_matrix_info = first_matrix_init()
-    second_matrix_info = second_matrix_init()
+    second_matrix_info = second_matrix_init(False)
 
     first_matrix, first_matrix_rows, first_matrix_columns = first_matrix_info
     second_matrix, second_matrix_rows, second_matrix_columns = second_matrix_info
 
+    # checks if matrices multiplication possible
     if first_matrix_columns == second_matrix_rows:
         product_matrix = []
         second_matrix = main_diagonal(second_matrix, second_matrix_rows, second_matrix_columns)
@@ -191,6 +198,7 @@ def matrix_transpose():
     print("3. Vertical line")
     print("4. Horizontal line")
 
+    # dictionary acting as a switch case as to reduce numbers of if else statements
     transpose_type = {1 : "main_diagonal(second_matrix, second_matrix_rows, second_matrix_columns)",
                       2 : "side_diagonal(second_matrix, second_matrix_rows, second_matrix_columns)",
                       3 : "vertical_line(second_matrix, second_matrix_rows, second_matrix_columns)",
@@ -198,7 +206,7 @@ def matrix_transpose():
 
     type_number = int(input("Your choice:"))
 
-    second_matrix_info = second_matrix_init()
+    second_matrix_info = second_matrix_init(True)
     second_matrix, second_matrix_rows, second_matrix_columns = second_matrix_info
 
     second_matrix = eval(transpose_type[type_number])
@@ -225,6 +233,8 @@ def main_diagonal(matrix, matrix_rows, matrix_columns):
 
 def side_diagonal(matrix, matrix_rows, matrix_columns):
 
+    # sequence of algorithm of horiontal, main diagonal and again horizontal diagonal transpose
+    # returns side diagonal transpose
     matrix = horizontal_line(matrix, matrix_rows, matrix_columns)
     matrix = main_diagonal(matrix, matrix_rows, matrix_columns)
     matrix = horizontal_line(matrix, matrix_rows, matrix_columns)
