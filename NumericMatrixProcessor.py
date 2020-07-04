@@ -6,13 +6,15 @@ def main_menu():
     user_choice = ""
 
     # dictionary acting as a switch case as to reduce numbers of if else statements
-    menu_options = {0 : "exit()",
-                    1 : "matrices_addition()",
-                    2 : "matrix_multiplication()",
-                    3 : "matrices_multiplication()",
-                    4 : "matrix_transpose()",
-                    5 : "print(matrix_determinant(matrix, matrix_rows, matrix_columns))",
-                    6 : "print(matrix_inverse(matrix, matrix_rows, matrix_columns))"}
+    menu_options = {
+        0: exit,
+        1: matrices_addition,
+        2: matrix_multiplication,
+        3: matrices_multiplication,
+        4: matrix_transpose,
+        5: lambda: print(matrix_determinant(matrix, matrix_rows, matrix_columns)),
+        6: lambda: print(matrix_inverse(matrix, matrix_rows, matrix_columns))
+    }
 
     # while loop to keep running program until user exits
     while user_choice != 0:
@@ -31,7 +33,7 @@ def main_menu():
             matrix_info = second_matrix_init(True)
             matrix, matrix_rows, matrix_columns = matrix_info
             
-        eval(menu_options[user_choice])
+        menu_options[user_choice]()
 
         print("")
 
@@ -199,17 +201,19 @@ def matrix_transpose():
     print("4. Horizontal line")
 
     # dictionary acting as a switch case as to reduce numbers of if else statements
-    transpose_type = {1 : "main_diagonal(second_matrix, second_matrix_rows, second_matrix_columns)",
-                      2 : "side_diagonal(second_matrix, second_matrix_rows, second_matrix_columns)",
-                      3 : "vertical_line(second_matrix, second_matrix_rows, second_matrix_columns)",
-                      4 : "horizontal_line(second_matrix, second_matrix_rows, second_matrix_columns)"}
+    transpose_type = {
+        1: main_diagonal,
+        2: side_diagonal,
+        3: vertical_line,
+        4: horizontal_line
+    }
 
     type_number = int(input("Your choice:"))
 
     second_matrix_info = second_matrix_init(True)
     second_matrix, second_matrix_rows, second_matrix_columns = second_matrix_info
 
-    second_matrix = eval(transpose_type[type_number])
+    second_matrix = transpose_type[type_number](second_matrix, second_matrix_rows, second_matrix_columns)
 
     print("The result is:")
     for rows in range(second_matrix_rows):
@@ -270,7 +274,7 @@ def horizontal_line(matrix, matrix_rows, matrix_columns):
 def matrix_determinant(matrix, matrix_rows, matrix_columns):
 
     if matrix_rows == matrix_columns == 2:
-        return ((matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0]))
+        return (matrix[0][0] * matrix[1][1]) - (matrix[0][1] * matrix[1][0])
 
     is_triangle_matrix = check_if_triangle_matrix(matrix, matrix_rows, matrix_columns)
 
